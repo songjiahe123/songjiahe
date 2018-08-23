@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wolfking.jeesite.modules.sys.dao.AssetsDao">
+    <sql id="assetsColumns">
+    	a.eid as "eid",
+    	a.appid as "appid",
+    	a.storage,
+    	a.bandwidth,
+    	a.n_account as "naccount",
+    	a.n_devices as "ndevices",
+    	a.work_mode as "workMode"
+    </sql>
+	<select id="get" resultType="com.wolfking.jeesite.modules.sys.entity.Assets">
+		SELECT 
+			<include refid="assetsColumns"/>
+		FROM assets a
+		WHERE  a.eid = #{eid} and a.appid=#{appid}
+	</select>
+	<select id="getbyAppidOfficeid" resultType="com.wolfking.jeesite.modules.sys.entity.Assets">
+		SELECT 
+			<include refid="assetsColumns"/>
+		FROM assets a
+		WHERE a.eid = #{eid} and a.appid=#{appid}
+	</select>
+	<select id="findList" resultType="com.wolfking.jeesite.modules.sys.entity.Assets">
+		SELECT 
+			<include refid="assetsColumns"/> 
+		FROM Assets a
+		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		
+		ORDER BY update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="com.wolfking.jeesite.modules.sys.entity.Assets">
+		SELECT 
+			<include refid="assetsColumns"/>
+		FROM Assets a
+		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY update_date DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO Assets(
+			eid, 
+			appid, 
+			storage, 
+			bandwidth, 
+			n_account, 
+			n_devices, 
+			work_mode
+		) VALUES (
+			#{eid}, 
+			#{appid}, 
+			#{storage}, 
+			#{bandwidth}, 
+			#{naccount}, 
+			#{ndevices}, 
+			#{workMode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE Assets SET 
+			storage = #{storage}, 
+			bandwidth = #{bandwidth}, 
+			n_account = #{naccount}, 
+			n_devices = #{ndevices}, 
+			work_Mode = #{workMode}
+		WHERE eid = #{eid} and appid=#{appid}
+	</update>
+	
+	<update id="delete">
+		UPDATE Assets SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE eid = #{eid} and appid=#{appid}
+	</update>
+	
+</mapper>

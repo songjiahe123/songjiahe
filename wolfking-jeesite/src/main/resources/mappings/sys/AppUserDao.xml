@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wolfking.jeesite.modules.sys.dao.AppUserDao">
+     <sql id="appUserColumns">
+    	a.app_id,
+    	a.user_id,
+    	a.roleid,
+    	ap.id as "app.id",
+    	ap.appname as "app.appname"
+    </sql>
+    <sql id="appUserJoins">
+		LEFT JOIN sys_user o ON o.id = a.user_id
+		left join sys_apps ap on ap.id=a.app_id
+    </sql>
+	<select id="get" resultType="com.wolfking.jeesite.modules.sys.entity.AppUser">
+		SELECT 
+			<include refid="appUserColumns"/>
+		FROM app_user a
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.wolfking.jeesite.modules.sys.entity.AppUser">
+		SELECT 
+			<include refid="appUserColumns"/>
+		FROM app_User a
+		<include refid="appUserJoins"/>
+		WHERE user_id=#{userid}
+	</select>
+	
+	<select id="findAllList" resultType="com.wolfking.jeesite.modules.sys.entity.AppUser">
+		SELECT 
+			<include refid="appUserColumns"/>
+		FROM app_user a
+		WHERE user_id=#{userid}
+	</select>
+	<insert id="insert">
+		INSERT INTO app_user(
+			app_id,
+			user_id,
+			roleid
+		) VALUES (
+			#{appid}, 
+			#{userid},
+			#{roleid}
+		)
+	</insert>
+	<update id="delete">
+		delete from app_user where app_id=#{appid} and user_id=#{userid}
+	</update>
+	<update id="deletebyuserid">
+		delete from app_user where user_id=#{userid}
+	</update>
+</mapper>
