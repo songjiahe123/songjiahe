@@ -128,9 +128,12 @@ public class SystemService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
+		SsoService sso=new SsoService();
 		if (StringUtils.isBlank(user.getId())) {
 			user.preInsert();
 			userDao.insert(user);
+			//插入用户的同时将用户信息注入SSO
+			sso.insertUser(user);
 		} else {
 			// 清除原用户机构用户缓存
 			User oldUser = userDao.get(user.getId());
@@ -141,6 +144,8 @@ public class SystemService extends BaseService {
 			// 更新用户数据
 			user.preUpdate();
 			userDao.update(user);
+			//更新用户的同时同步更新SSO中的用户信息
+			sso.updateUser(user);
 		}
 		if (StringUtils.isNotBlank(user.getId())) {
 			// 更新用户与角色关联

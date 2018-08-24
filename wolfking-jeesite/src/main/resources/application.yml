@@ -61,3 +61,7 @@ page:
 #文件上传的路径
 userfiles:
   basedir: f:/data/jeesite/upload
+#SSO url路径
+SSO:
+  BASE:
+    URL: http://127.0.0.1:8081
